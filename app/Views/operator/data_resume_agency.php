@@ -4,7 +4,7 @@
 <div class="container col-11">
 	<div class="row">
 		<div class="col">
-			<h3 class="text-center p-2">Data STO</h3>
+			<h3 class="text-center p-2">Data Resume Agency</h3>
 		</div>
 	</div>
 	<div id="accordion">
@@ -35,7 +35,7 @@
                   <td>
                   	<select class="form-control" name="agency">
                   		<?php
-                  			foreach ($allSales as $k) : ?>
+                  			foreach ($join_sales as $k) : ?>
                   		<option><?= $k['agency'] ?></option>
                   		<?php endforeach; ?>
                   	</select>
@@ -81,43 +81,57 @@
 				<thead class="text-center">
     			<tr>
       				<th rowspan="2">No</th>
-      				<th rowspan="2">Nama</th>
+      				<th rowspan="2" class="col-3">Nama</th>
       				<th rowspan="2">Kode</th>
-      				<th rowspan="2">Agency</th>
-      				<th colspan="5">STO</th>
+      				<th rowspan="2" class="col-3">Agency</th>
+      				<th colspan="2">Group Channel</th>
       				<th rowspan="2" class="bg-warning">Total</th>
-      			</tr>
+      				<th rowspan="2" class="bg-primary">Rank</th>
+    			</tr>
     			<tr>
-      				<th>CKI</th>
-    				<th>RGA</th>
-    				<th>JTW</th>
-    				<th>MJL</th>
-    				<th>KAD</th>
+    				<th>ND</th>
+    				<th>D</th>
     			</tr>
   				</thead>
   				<tbody>
   				<?php
-  					$n=1+(10 * ($currentPage - 1));
-  					foreach($allSales as $k) : ?>
-  				<tr>
-  					<td class="text-center" ><?= $n++ ?></td>
-  					<td><?= strtoupper($k['nama_sales']); ?></td>
-  					<td class="text-center col-1" ><?= $k['kode']; ?></td>
-  					<td class="text-center col-3" ><?= $k['agency']; ?></td>
-  					<td class="text-center" >0</td>
-  					<td class="text-center" >0</td>
-  					<td class="text-center" >0</td>
-  					<td class="text-center" >0</td>
-  					<td class="text-center" >0</td>
-  					<td class="text-center bg-warning" >0</td>
-  				</tr>
-  				<?php endforeach; ?>
+  				$n=1+(10 * ($currentPage - 1));
+  					foreach ($join_sales as $k) : ?>
+  					<tr>
+	  					<td class="text-center"><?= $n++ ?></td>
+	  					<td><?= strtoupper($k['nama_sales']) ?></td>
+	  					<td class="text-center"><?= $k['kode'] ?></td>
+	  					<td class="text-center"><?= $k['agency'] ?></td>
+	  					<td class="text-center">
+	  					<?php
+	  						if($k['id_user'] == $k['Sid'] && $k['group_channel'] =='Non Digital'){
+	  							echo 1;
+	  						}else{
+	  							echo 0;
+	  						}
+  						?>
+	  					</td>
+	  					<td class="text-center">
+	  						<?php
+	  						if($k['id_user'] == $k['Sid'] && $k['group_channel'] =='Digital'){
+	  							echo 1;
+	  						}else{
+	  							echo 0;
+	  						}
+  						?>
+	  					</td>
+	  					<td class="text-center bg-warning">0</td>
+	  					<td class="text-center bg-primary">0</td>
+	  				</tr>
+  					<?php endforeach; ?>
     			<tr>
-      				<th scope="row" colspan="3">Total Keseluruhan</th>
-    			</tr>
+      				<th scope="row" colspan="4">Total Keseluruhan</th>
+      				<td class="text-center">0</td>
+      				<td class="text-center">0</td>
+      				<td class="text-center">0</td>
+      			</tr>
   				</tbody>
 			</table>
-			<?= $pager->links('tb_datasales', 'table_pagination'); ?>
 		</div>
 	</div>
 </div>

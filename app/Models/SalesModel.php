@@ -6,6 +6,7 @@ use CodeIgniter\Model;
 
 class SalesModel extends Model
 {
+
     protected $table = 'tb_hariansales';
 
     public function cek_data($kcontact)
@@ -18,14 +19,17 @@ class SalesModel extends Model
         $this->db->table('tb_hariansales')->insert($data);
     }
 
-    public function get_product_keyword($data)
+    public function search($keyword)
     {
-        $this->db->select('*');
-        $this->db->from('tb_hariansales');
-        $this->db->like('nama_sales', $keyword);
-        $this->db->or_like('agency', $keyword);
-        $this->db->or_like('kode', $keyword);
-        return $this->db->get()->result();
+        return $this->table('tb_hariansales')->like('kcontact', $keyword)->orLike('tanggal_order', $keyword)->orLike('type_layanan', $keyword)->orLike('group_channel', $keyword)->orLike('sto', $keyword);
+    }
 
+    public function tanggal($data)
+    {
+        helper("formatdate");
+        // $builder = $this->table('tb_hariansales');
+        // $builder->where('tanggal_order >=', $tanggalmin);
+        // $builder->where('tanggal_order <=', $tanggalmax);
+        return $this->table('tb_hariansales')->where('date_order >=', $data['tanggal_min'])->where('date_order <=', $data['tanggal_max']);
     }
 }

@@ -19,12 +19,11 @@
 				Data Sales
 				</a>
 				<div class="dropdown-menu mb-3" aria-labelledby="dropdownMenuButton">
-					<a class="dropdown-item" href="<?= base_url('operator/import_excel'); ?>">Import Data Sales Post</a>
+					<a class="dropdown-item" href="<?= base_url('operator/import_excel_datasales'); ?>">Import Data Sales</a>
+					<a class="dropdown-item" href="<?= base_url('operator/import_excel_hariansales'); ?>">Import Harian Sales Post</a>
 					<hr>
-					<a class="dropdown-item" href="<?= base_url('operator/data_bulanan');?>">Data Bulanan</a>
+					<a class="dropdown-item" href="<?= base_url('operator/data_resume_agency');?>">Data Resume Agency</a>
 					<a class="dropdown-item" href="<?= base_url('operator/data_sto');?>">Data STO</a>
-					<a class="dropdown-item" href="<?= base_url('operator/data_produktivitasSP');?>">Data Produktivitas Sales Post</a>
-					<a class="dropdown-item" href="<?= base_url('operator/data_RESUMEAGENCY');?>">Data RESUMEAGENCY</a>
 				</div>
 			</div>
 			</li>
