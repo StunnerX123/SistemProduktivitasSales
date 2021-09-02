@@ -27,16 +27,17 @@
                 <tr>
                   <th class="text-center"><label>Dari tanggal</label></th>
                   <th class="text-center"><label>Sampai dengan</label></th>
+                  <th class="text-center"><label>Agency</label></th>
                 </tr>
                 <tr>
-                  <td><input type="date" name="tanggalmin" class="form-control" required></td>
-                  <td><input type="date" name="tanggalmax" class="form-control" required>
-                  </td>
+                  <td><input type="date" name="tanggalmin" class="form-control" value="<?= $tanggal['tanggal_min'] ?>" required></td>
+                  <td><input type="date" name="tanggalmax" class="form-control" value="<?= $tanggal['tanggal_max'] ?>" required></td>
                   <td>
                   	<select class="form-control" name="agency">
-                  		<?php
-                  			foreach ($allSales as $k) : ?>
-                  		<option><?= $k['agency'] ?></option>
+                      <option>--Pilihan Anda--</option>
+                      <?php
+                  			foreach ($allAgency as $k) : ?>
+                  		  <option><?= $k['agency'] ?></option>
                   		<?php endforeach; ?>
                   	</select>
                   </td>
@@ -104,12 +105,12 @@
   					<td><?= strtoupper($k['nama_sales']); ?></td>
   					<td class="text-center col-1" ><?= $k['kode']; ?></td>
   					<td class="text-center col-3" ><?= $k['agency']; ?></td>
-  					<td class="text-center" >0</td>
-  					<td class="text-center" >0</td>
-  					<td class="text-center" >0</td>
-  					<td class="text-center" >0</td>
-  					<td class="text-center" >0</td>
-  					<td class="text-center bg-warning" >0</td>
+  					<td class="text-center" ><?= $k['cki']; ?></td>
+  					<td class="text-center" ><?= $k['rga']; ?></td>
+  					<td class="text-center" ><?= $k['jtw']; ?></td>
+  					<td class="text-center" ><?= $k['mjl']; ?></td>
+  					<td class="text-center" ><?= $k['kad']; ?></td>
+  					<td class="text-center bg-warning" ><?= $k['total']; ?></td>
   				</tr>
   				<?php endforeach; ?>
     			<tr>
@@ -117,7 +118,7 @@
     			</tr>
   				</tbody>
 			</table>
-			<?= $pager->links('tb_datasales', 'table_pagination'); ?>
+			<?= $pager->links('joinstoSalesLeft', 'table_pagination'); ?>
 		</div>
 	</div>
 </div>

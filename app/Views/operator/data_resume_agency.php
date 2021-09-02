@@ -27,16 +27,17 @@
                 <tr>
                   <th class="text-center"><label>Dari tanggal</label></th>
                   <th class="text-center"><label>Sampai dengan</label></th>
+                  <th class="text-center"><label>Agency</label></th>
                 </tr>
                 <tr>
-                  <td><input type="date" name="tanggalmin" class="form-control" required></td>
-                  <td><input type="date" name="tanggalmax" class="form-control" required>
-                  </td>
+                  <td><input type="date" name="tanggalmin" class="form-control" value="<?= $tanggal['tanggal_min'] ?>" required></td>
+                  <td><input type="date" name="tanggalmax" class="form-control" value="<?= $tanggal['tanggal_max'] ?>" required></td>
                   <td>
                   	<select class="form-control" name="agency">
-                  		<?php
-                  			foreach ($join_sales as $k) : ?>
-                  		<option><?= $k['agency'] ?></option>
+                  		<option>--Pilihan Anda--</option>
+                      <?php
+                  			foreach ($allAgency as $k => $data) : ?>
+                        <option><?= $data['agency'] ?></option>
                   		<?php endforeach; ?>
                   	</select>
                   </td>
@@ -96,32 +97,16 @@
   				<tbody>
   				<?php
   				$n=1+(10 * ($currentPage - 1));
-  					foreach ($join_sales as $k) : ?>
+  					foreach ($join_sales as $k => $data) : ?>
   					<tr>
 	  					<td class="text-center"><?= $n++ ?></td>
-	  					<td><?= strtoupper($k['nama_sales']) ?></td>
-	  					<td class="text-center"><?= $k['kode'] ?></td>
-	  					<td class="text-center"><?= $k['agency'] ?></td>
-	  					<td class="text-center">
-	  					<?php
-	  						if($k['id_user'] == $k['Sid'] && $k['group_channel'] =='Non Digital'){
-	  							echo 1;
-	  						}else{
-	  							echo 0;
-	  						}
-  						?>
-	  					</td>
-	  					<td class="text-center">
-	  						<?php
-	  						if($k['id_user'] == $k['Sid'] && $k['group_channel'] =='Digital'){
-	  							echo 1;
-	  						}else{
-	  							echo 0;
-	  						}
-  						?>
-	  					</td>
-	  					<td class="text-center bg-warning">0</td>
-	  					<td class="text-center bg-primary">0</td>
+	  					<td><?= strtoupper($data['nama_sales']) ?></td>
+	  					<td class="text-center"><?= $data['kode'] ?></td>
+	  					<td class="text-center"><?= $data['agency'] ?></td>
+	  					<td class="text-center"><?= $data['non_digital'] ?></td>
+	  					<td class="text-center"><?= $data['digital'] ?></td>
+	  					<td class="text-center bg-warning"><?= $data['total'] ?></td>
+	  					<td class="text-center bg-primary"><?= $data['rank'] ?></td>
 	  				</tr>
   					<?php endforeach; ?>
     			<tr>
@@ -132,6 +117,7 @@
       			</tr>
   				</tbody>
 			</table>
+      <?= $pager->links('joinSalesLeft', 'table_pagination'); ?>
 		</div>
 	</div>
 </div>

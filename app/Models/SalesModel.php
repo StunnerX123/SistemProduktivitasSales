@@ -27,9 +27,6 @@ class SalesModel extends Model
     public function tanggal($data)
     {
         helper("formatdate");
-        // $builder = $this->table('tb_hariansales');
-        // $builder->where('tanggal_order >=', $tanggalmin);
-        // $builder->where('tanggal_order <=', $tanggalmax);
         return $this->table('tb_hariansales')->where('date_order >=', $data['tanggal_min'])->where('date_order <=', $data['tanggal_max']);
     }
 }

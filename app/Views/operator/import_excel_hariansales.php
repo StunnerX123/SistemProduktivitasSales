@@ -58,9 +58,9 @@
                   <th class="text-center"><label>Sampai dengan</label></th>
                 </tr>
                 <tr>
-                  <td><input type="date" name="tanggalmin" class="form-control" required></td>
-                  <td><input type="date" name="tanggalmax" class="form-control" required>
-                  </td>
+                  <td><input type="date" name="tanggalmin" class="form-control" value="<?= $tanggal['tanggal_min'] ?>" required></td>
+                  <td><input type="date" name="tanggalmax" class="form-control" value="<?= $tanggal['tanggal_max'] ?>" required></td>
+                  <td>
                   <td>
                     <div class="input-group">
                       <button class="btn btn-outline-secondary" type="submit">Pilih</button>

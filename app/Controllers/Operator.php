@@ -10,6 +10,7 @@ class Operator extends BaseController
 	public function __construct()
 	{
 		$this->db = \Config\Database::connect();
+		$this->agency = new \App\Models\AgencyModel();
 	}
 
 	public function index()
@@ -154,6 +155,7 @@ class Operator extends BaseController
 		$data = [
 			'title' => 'Import Harian Sales Post',
 			'harian_sales' => $cari->paginate(10, 'tb_hariansales'),
+			'tanggal' => $search_tanggal,
 			'pager' => $this->sales->pager,
 			'currentPage' => $currentPage
 		];
@@ -197,7 +199,7 @@ class Operator extends BaseController
 			$datasales = array(
 			 	'kode' => trim($components['3']),
 			 	'nama_sales' => 'XXX',
-			 	'agency' => 'Anonymus',
+			 	'agency' => 'xxxAnonymusxxx',
 			 	'status' => 'Unknown'
 			);
 			$this->data_sales->add($datasales);
@@ -247,29 +249,31 @@ class Operator extends BaseController
 
 	public function data_resume_agency()
 	{
-		$currentPage = $this->request->getVar('page_tb_datasales') ? $this->request->getVar('page_tb_datasales') : 1;
+		$currentPage = $this->request->getVar('page_joinSalesLeft') ? $this->request->getVar('page_joinSalesLeft') : 1;
 
+		$search_tanggal = [
+			'tanggal_min' => $this->request->getGet('tanggalmin'),
+			'tanggal_max' => $this->request->getGet('tanggalmax'),
+			'agency' => $this->request->getGet('agency')
+		];
 		$keyword = $this->request->getVar('keyword');
-		if ($keyword) {
-			$cari = $this->data_sales->search($keyword)->orderBy('agency', 'DESC');
-		}else{
-			$cari = $this->data_sales->orderBy('agency', 'DESC');
+
+		if ($search_tanggal['tanggal_min']=="" && $search_tanggal['tanggal_max']=="" && $search_tanggal['agency']=="" && $keyword==""){
+		 	$cari = $this->data_sales->joinSalesLeft();
+		}else if($search_tanggal['tanggal_min']!="" && $search_tanggal['tanggal_max']!="" && $search_tanggal['agency']=="--Pilihan Anda--"){
+			$cari = $this->data_sales->tanggalJoinSales($search_tanggal);
+		}else if($search_tanggal['tanggal_min']!="" && $search_tanggal['tanggal_max']!="" && $search_tanggal['agency']!="--Pilihan Anda--"){
+			$cari = $this->data_sales->tanggalagenJoinSales($search_tanggal);
+		}else if ($search_tanggal['tanggal_min']=="" && $search_tanggal['tanggal_max']=="" && $search_tanggal['agency']=="" && $keyword!="") {
+			$cari = $this->data_sales->searchSalesLeft($keyword);	
 		}
-
-		$builder = $this->db->table('tb_datasales');
-        $builder->select('tb_datasales.id_user, tb_datasales.nama_sales, tb_datasales.kode, tb_hariansales.id_user as Sid, tb_hariansales.tanggal_order, tb_datasales.agency, tb_hariansales.group_channel, tb_hariansales.sto');
-        $builder->join('tb_hariansales', 'tb_datasales.id_user = tb_hariansales.id_user', 'LEFT');
-        $builder->orderBy('agency', 'DESC');
-        //$builder->groupBy('kode');
-        $query = $builder->get()->getResultArray();
-
-        d($query);
 
 		$data = [
 			'title' => 'Data Bulanan Sales',
-			'data_sales' => $cari->paginate(10, 'tb_datasales'),
-			'join_sales' => $query,
-			'pager' => $this->data_sales->pager,
+			'join_sales' => $cari,
+			'tanggal' => $search_tanggal,
+			'allAgency' => $this->agency->selectAgency(),
+			'pager'=> $this->data_sales->pager,
 			'currentPage' => $currentPage
 		];
 
@@ -280,31 +284,33 @@ class Operator extends BaseController
 	{
 		$currentPage = $this->request->getVar('page_tb_datasales') ? $this->request->getVar('page_tb_datasales') : 1;
 
+		$search_tanggal = [
+			'tanggal_min' => $this->request->getGet('tanggalmin'),
+			'tanggal_max' => $this->request->getGet('tanggalmax'),
+			'agency' => $this->request->getGet('agency')
+		];
+		$keyword = $this->request->getVar('keyword');
+
+		if ($search_tanggal['tanggal_min']=="" && $search_tanggal['tanggal_max']=="" && $search_tanggal['agency']=="" && $keyword==""){
+		 	$cari = $this->data_sales->joinstoSalesLeft();
+		}else if($search_tanggal['tanggal_min']!="" && $search_tanggal['tanggal_max']!="" && $search_tanggal['agency']=="--Pilihan Anda--"){
+			$cari = $this->data_sales->tanggalstoJoinSales($search_tanggal);
+		}else if($search_tanggal['tanggal_min']!="" && $search_tanggal['tanggal_max']!="" && $search_tanggal['agency']!="--Pilihan Anda--"){
+			$cari = $this->data_sales->tanggalagenstoJoinSales($search_tanggal);
+		}else if ($search_tanggal['tanggal_min']=="" && $search_tanggal['tanggal_max']=="" && $search_tanggal['agency']=="" && $keyword!="") {
+			$cari = $this->data_sales->searchstoSalesLeft($keyword);	
+		}
+
 		$data = [
 			'title' => 'Data STO',
-			'allSales' => $this->data_sales->paginate(10, 'tb_datasales'),
+			'tanggal' => $search_tanggal,
+			'allAgency' => $this->agency->selectAgency(),
+			'allSales' => $cari,
 			'pager' => $this->data_sales->pager,
+			'pagerAgency' => $this->data_sales->pager,
 			'currentPage' => $currentPage
 		];
 
 		return view('operator/data_sto', $data);
-	}
-		public function data_produktivitasSP()
-	{
-
-		$data = [
-			'title' => 'Data Produktivitas Sales'
-		];
-
-		return view('operator/data_produktivitasSP', $data);
-	}
-		public function data_RESUMEAGENCY()
-	{
-
-		$data = [
-			'title' => 'Data RESUMEAGENCY'
-		];
-
-		return view('operator/data_RESUMEAGENCY', $data);
 	}
 }
